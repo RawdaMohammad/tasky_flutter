@@ -80,7 +80,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     if (_key.currentState?.validate() ?? false) {
                       final taskJson = PreferencesManager().getString('tasks');
 
-                      List<dynamic> listTasks = []; // --> List<Map<String ,dynamic>>
+                      List<dynamic> listTasks = [];
 
                       if (taskJson != null) {
                         listTasks = jsonDecode(taskJson);
