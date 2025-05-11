@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:tasky/core/constants/storage_key.dart';
 import 'package:tasky/core/services/preferences_manager.dart';
 import 'package:tasky/core/widgets/custom_svg_picture.dart';
 import 'package:tasky/features/add_task/add_task_screen.dart';
 import 'package:tasky/features/home/components/achieved_tasks_widget.dart';
 import 'package:tasky/features/home/components/high_priority_tasks_widget.dart';
-import 'package:tasky/models/task_model.dart';
 import 'package:tasky/features/home/components/sliver_task_list_widget.dart';
+import 'package:tasky/models/task_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -38,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _loadUserName() async {
     setState(() {
-      username = PreferencesManager().getString('username');
+      username = PreferencesManager().getString(StorageKey.username);
       userImagePath = PreferencesManager().getString('user_image');
     });
   }
