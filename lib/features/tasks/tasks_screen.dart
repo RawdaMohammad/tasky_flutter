@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tasky/core/constants/storage_key.dart';
 import 'package:tasky/core/services/preferences_manager.dart';
 import 'package:tasky/models/task_model.dart';
 import 'package:tasky/core/components/task_list_widget.dart';
@@ -27,7 +28,7 @@ class _TasksScreenState extends State<TasksScreen> {
     setState(() {
       isLoading = true;
     });
-    final finalTask = PreferencesManager().getString('tasks');
+    final finalTask = PreferencesManager().getString(StorageKey.tasks);
     if (finalTask != null) {
       final taskAfterDecode = jsonDecode(finalTask) as List<dynamic>;
       setState(() {
@@ -45,7 +46,7 @@ class _TasksScreenState extends State<TasksScreen> {
     List<TaskModel> tasks = [];
     if (id == null) return;
 
-    final finalTask = PreferencesManager().getString('tasks');
+    final finalTask = PreferencesManager().getString(StorageKey.tasks);
     if (finalTask != null) {
       final taskAfterDecode = jsonDecode(finalTask) as List<dynamic>;
       tasks = taskAfterDecode.map((element) => TaskModel.fromJson(element)).toList();
@@ -56,7 +57,7 @@ class _TasksScreenState extends State<TasksScreen> {
       });
 
       final updatedTask = tasks.map((element) => element.toJson()).toList();
-      PreferencesManager().setString('tasks', jsonEncode(updatedTask));
+      PreferencesManager().setString(StorageKey.tasks, jsonEncode(updatedTask));
     }
   }
 
@@ -84,7 +85,7 @@ class _TasksScreenState extends State<TasksScreen> {
                         todoTasks[index!].isDone = value ?? false;
                       });
 
-                      final allData = PreferencesManager().getString('tasks');
+                      final allData = PreferencesManager().getString(StorageKey.tasks);
 
                       if (allData != null) {
                         List<TaskModel> allDataList =
@@ -93,7 +94,7 @@ class _TasksScreenState extends State<TasksScreen> {
                         final int newIndex = allDataList.indexWhere((e) => e.id == todoTasks[index!].id);
                         allDataList[newIndex] = todoTasks[index!];
 
-                        await PreferencesManager().setString('tasks', jsonEncode(allDataList));
+                        await PreferencesManager().setString(StorageKey.tasks, jsonEncode(allDataList));
                         _loadTask();
                       }
                     },

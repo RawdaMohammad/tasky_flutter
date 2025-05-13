@@ -32,8 +32,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _loadData() async {
     setState(() {
       username = PreferencesManager().getString(StorageKey.username) ?? '';
-      motivationQuote = PreferencesManager().getString('motivation_quote') ?? "One task at a time. One step closer.";
-      userImagePath = PreferencesManager().getString('user_image');
+      motivationQuote = PreferencesManager().getString(StorageKey.motivationQuote) ?? "One task at a time. One step closer.";
+      userImagePath = PreferencesManager().getString(StorageKey.userImage);
       isLoading = false;
     });
   }
@@ -150,8 +150,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ListTile(
                   onTap: () async {
                     PreferencesManager().remove(StorageKey.username);
-                    PreferencesManager().remove("motivation_quote");
-                    PreferencesManager().remove("tasks");
+                    PreferencesManager().remove(StorageKey.motivationQuote);
+                    PreferencesManager().remove(StorageKey.tasks);
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
@@ -175,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _saveImage(XFile file) async {
     final appDir = await getApplicationDocumentsDirectory();
     final newFile = await File(file.path).copy('${appDir.path}/${file.name}');
-    PreferencesManager().setString('user_image', newFile.path);
+    PreferencesManager().setString(StorageKey.userImage, newFile.path);
   }
 }
 

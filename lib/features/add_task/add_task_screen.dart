@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tasky/core/constants/storage_key.dart';
 import 'package:tasky/core/services/preferences_manager.dart';
 import 'package:tasky/core/widgets/custom_text_form_field.dart';
 import 'package:tasky/models/task_model.dart';
@@ -78,7 +79,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   ),
                   onPressed: () async {
                     if (_key.currentState?.validate() ?? false) {
-                      final taskJson = PreferencesManager().getString('tasks');
+                      final taskJson = PreferencesManager().getString(StorageKey.tasks);
 
                       List<dynamic> listTasks = [];
 
@@ -97,7 +98,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       listTasks.add(model.toJson());
 
                       final taskEncode = jsonEncode(listTasks);
-                      await PreferencesManager().setString('tasks', taskEncode);
+                      await PreferencesManager().setString(StorageKey.tasks, taskEncode);
 
                       Navigator.of(context).pop(true);
                     }

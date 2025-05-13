@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tasky/core/constants/storage_key.dart';
 import 'package:tasky/core/services/preferences_manager.dart';
 import 'package:tasky/models/task_model.dart';
 import 'package:tasky/core/components/task_list_widget.dart';
@@ -28,7 +29,7 @@ class _CompleteTasksScreenState extends State<CompleteTasksScreen> {
       isLoading = true;
     });
 
-    final finalTask = PreferencesManager().getString('tasks');
+    final finalTask = PreferencesManager().getString(StorageKey.tasks);
     if (finalTask != null) {
       final taskAfterDecode = jsonDecode(finalTask) as List<dynamic>;
       setState(() {
@@ -46,7 +47,7 @@ class _CompleteTasksScreenState extends State<CompleteTasksScreen> {
     List<TaskModel> tasks = [];
     if (id == null) return;
 
-    final finalTask = PreferencesManager().getString('tasks');
+    final finalTask = PreferencesManager().getString(StorageKey.tasks);
     if (finalTask != null) {
       final taskAfterDecode = jsonDecode(finalTask) as List<dynamic>;
       tasks = taskAfterDecode.map((element) => TaskModel.fromJson(element)).toList();
@@ -57,7 +58,7 @@ class _CompleteTasksScreenState extends State<CompleteTasksScreen> {
       });
 
       final updatedTask = tasks.map((element) => element.toJson()).toList();
-      PreferencesManager().setString('tasks', jsonEncode(updatedTask));
+      PreferencesManager().setString(StorageKey.tasks, jsonEncode(updatedTask));
     }
   }
 
@@ -88,7 +89,7 @@ class _CompleteTasksScreenState extends State<CompleteTasksScreen> {
                         completeTasks[index!].isDone = value ?? false;
                       });
 
-                      final allData = PreferencesManager().getString('tasks');
+                      final allData = PreferencesManager().getString(StorageKey.tasks);
 
                       if (allData != null) {
                         List<TaskModel> allDataList =
@@ -96,7 +97,7 @@ class _CompleteTasksScreenState extends State<CompleteTasksScreen> {
                         final int newIndex = allDataList.indexWhere((e) => e.id == completeTasks[index!].id);
                         allDataList[newIndex] = completeTasks[index!];
 
-                        await PreferencesManager().setString('tasks', jsonEncode(allDataList));
+                        await PreferencesManager().setString(StorageKey.tasks, jsonEncode(allDataList));
                         _loadTask();
                       }
                     },

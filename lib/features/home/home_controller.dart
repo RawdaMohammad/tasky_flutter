@@ -23,7 +23,7 @@ class HomeController with ChangeNotifier {
 
   void loadUserName() async {
     username = PreferencesManager().getString(StorageKey.username);
-    userImagePath = PreferencesManager().getString('user_image');
+    userImagePath = PreferencesManager().getString(StorageKey.userImage);
 
     notifyListeners();
   }
@@ -31,7 +31,7 @@ class HomeController with ChangeNotifier {
   void loadTask() async {
     isLoading = true;
 
-    final finalTask = PreferencesManager().getString('tasks');
+    final finalTask = PreferencesManager().getString(StorageKey.tasks);
     if (finalTask != null) {
       final taskAfterDecode = jsonDecode(finalTask) as List<dynamic>;
 
@@ -55,7 +55,7 @@ class HomeController with ChangeNotifier {
     calculatePercent();
 
     final updatedTask = tasks.map((element) => element.toJson()).toList();
-    PreferencesManager().setString('tasks', jsonEncode(updatedTask));
+    PreferencesManager().setString(StorageKey.tasks, jsonEncode(updatedTask));
 
     notifyListeners();
   }
@@ -65,7 +65,7 @@ class HomeController with ChangeNotifier {
     tasks.removeWhere((task) => task.id == id);
     calculatePercent();
     final updatedTask = tasks.map((element) => element.toJson()).toList();
-    PreferencesManager().setString('tasks', jsonEncode(updatedTask));
+    PreferencesManager().setString(StorageKey.tasks, jsonEncode(updatedTask));
 
     notifyListeners();
   }
