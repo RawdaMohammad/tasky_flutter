@@ -9,7 +9,6 @@ import 'package:tasky/features/home/components/high_priority_tasks_widget.dart';
 import 'package:tasky/features/home/components/sliver_task_list_widget.dart';
 import 'package:tasky/features/home/home_controller.dart';
 
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -17,106 +16,85 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HomeController>(
       create: (context) => HomeController()..init(),
-      child: Consumer<HomeController>(
-        builder: (BuildContext context, HomeController value, Widget? child) {
-          final HomeController controller = context.read<HomeController>();
-          return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundImage: value.userImagePath == null
+                        Selector<HomeController, String?>(
+                          selector: (context, HomeController controller) => controller.userImagePath,
+                          builder: (BuildContext context, String? userImagePath, Widget? child) {
+                            return CircleAvatar(
+                              backgroundImage: userImagePath == null
                                   ? AssetImage('assets/images/person.png')
-                                  : FileImage(File(value.userImagePath!)),
-                            ),
-                            SizedBox(width: 8),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Good Evening, ${value.username}",
-                                  style: Theme.of(context).textTheme.titleMedium,
-                                ),
-                                Text(
-                                  "One task at a time. One step closer.",
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                )
-                              ],
-                            ),
-                          ],
+                                  : FileImage(File(userImagePath)),
+                            );
+                          },
                         ),
-                        SizedBox(height: 16),
-                        Text(
-                          'Yuhuu ,Your work Is',
-                          style: Theme.of(context).textTheme.displayLarge,
-                        ),
-                        Row(
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'almost done ! ',
-                              style: Theme.of(context).textTheme.displayLarge,
+                            Selector<HomeController, String?>(
+                              selector: (context, HomeController controller) => controller.username,
+                              builder: (BuildContext context, String? username, Widget? child) {
+                                return Text(
+                                  "Good Evening, $username",
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                );
+                              },
                             ),
-                            CustomSvgPicture.withoutColor(path: 'assets/images/waving_hand.svg'),
+                            Text(
+                              "One task at a time. One step closer.",
+                              style: Theme.of(context).textTheme.titleSmall,
+                            )
                           ],
-                        ),
-                        SizedBox(height: 16),
-                        AchievedTasksWidget(
-                          totalDoneTasks: value.totalDoneTasks,
-                          totalTask: value.totalTask,
-                          percent: value.percent,
-                        ),
-                        SizedBox(height: 8),
-                        HighPriorityTasksWidget(
-                          tasks: value.tasks,
-                          onTap: (bool? value, int? index) {
-                            controller.doneTask(value, index);
-                          },
-                          refresh: () {
-                            controller.loadTask();
-                          },
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 24, bottom: 16),
-                          child: Text(
-                            'My Tasks',
-                            style: Theme.of(context).textTheme.labelSmall,
-                          ),
                         ),
                       ],
                     ),
-                  ),
-                  value.isLoading
-                      ? SliverToBoxAdapter(
-                          child: Center(
-                              child: CircularProgressIndicator(
-                            value: 20,
-                          )),
-                        )
-                      : SliverTaskListWidget(
-                          tasks: value.tasks,
-                          onTap: (bool? value, int? index) {
-                            controller.doneTask(value, index);
-                          },
-                          onDelete: (int? id) {
-                            controller.deleteTask(id);
-                          },
-                          onEdit: () {
-                            controller.loadTask();
-                          },
+                    SizedBox(height: 16),
+                    Text(
+                      'Yuhuu ,Your work Is',
+                      style: Theme.of(context).textTheme.displayLarge,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'almost done ! ',
+                          style: Theme.of(context).textTheme.displayLarge,
                         ),
-                ],
+                        CustomSvgPicture.withoutColor(path: 'assets/images/waving_hand.svg'),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    AchievedTasksWidget(),
+                    SizedBox(height: 8),
+                    HighPriorityTasksWidget(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24, bottom: 16),
+                      child: Text(
+                        'My Tasks',
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            floatingActionButton: SizedBox(
-              height: 44,
-              child: FloatingActionButton.extended(
+              SliverTaskListWidget(),
+            ],
+          ),
+        ),
+        floatingActionButton: SizedBox(
+          height: 44,
+          child: Builder(
+            builder: (BuildContext context) {
+              return FloatingActionButton.extended(
                 onPressed: () async {
                   final bool? result = await Navigator.push(
                     context,
@@ -128,7 +106,7 @@ class HomeScreen extends StatelessWidget {
                   );
 
                   if (result != null && result) {
-                    controller.loadTask();
+                    context.read<HomeController>().loadTask();
                   }
                 },
                 label: Text(
@@ -136,10 +114,10 @@ class HomeScreen extends StatelessWidget {
                 ),
                 icon: Icon(Icons.add),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-              ),
-            ),
-          );
-        },
+              );
+            },
+          ),
+        ),
       ),
     );
   }

@@ -17,11 +17,11 @@ class HomeController with ChangeNotifier {
 
 
   init() {
-    loadUserName();
+    loadUserData();
     loadTask();
   }
 
-  void loadUserName() async {
+  void loadUserData() async {
     username = PreferencesManager().getString(StorageKey.username);
     userImagePath = PreferencesManager().getString(StorageKey.userImage);
 
