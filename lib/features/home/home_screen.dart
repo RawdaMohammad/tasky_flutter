@@ -7,15 +7,15 @@ import 'package:tasky/features/add_task/add_task_screen.dart';
 import 'package:tasky/features/home/components/achieved_tasks_widget.dart';
 import 'package:tasky/features/home/components/high_priority_tasks_widget.dart';
 import 'package:tasky/features/home/components/sliver_task_list_widget.dart';
-import 'package:tasky/features/home/home_controller.dart';
+import 'package:tasky/core/sharedControllers/task_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<HomeController>(
-      create: (context) => HomeController()..init(),
+    return ChangeNotifierProvider<TaskController>(
+      create: (context) => TaskController()..init(),
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -27,8 +27,8 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Selector<HomeController, String?>(
-                          selector: (context, HomeController controller) => controller.userImagePath,
+                        Selector<TaskController, String?>(
+                          selector: (context, TaskController controller) => controller.userImagePath,
                           builder: (BuildContext context, String? userImagePath, Widget? child) {
                             return CircleAvatar(
                               backgroundImage: userImagePath == null
@@ -41,8 +41,8 @@ class HomeScreen extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Selector<HomeController, String?>(
-                              selector: (context, HomeController controller) => controller.username,
+                            Selector<TaskController, String?>(
+                              selector: (context, TaskController controller) => controller.username,
                               builder: (BuildContext context, String? username, Widget? child) {
                                 return Text(
                                   "Good Evening, $username",
@@ -106,7 +106,7 @@ class HomeScreen extends StatelessWidget {
                   );
 
                   if (result != null && result) {
-                    context.read<HomeController>().loadTask();
+                    context.read<TaskController>().loadTask();
                   }
                 },
                 label: Text(

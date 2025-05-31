@@ -5,11 +5,15 @@ import 'package:tasky/core/constants/storage_key.dart';
 import 'package:tasky/core/services/preferences_manager.dart';
 import 'package:tasky/models/task_model.dart';
 
-class HomeController with ChangeNotifier {
-  List<TaskModel> tasksList = [];
+class TaskController with ChangeNotifier {
+
+  List<TaskModel> tasks = [];
+  List<TaskModel> toDoTasks = [];
+  List<TaskModel> completedTasks = [];
+  List<TaskModel> highPriorityTasks = [];
+
   String? username = "Default";
   String? userImagePath;
-  List<TaskModel> tasks = [];
   bool isLoading = false;
   int totalTask = 0;
   int totalDoneTasks = 0;
@@ -34,8 +38,21 @@ class HomeController with ChangeNotifier {
     final finalTask = PreferencesManager().getString(StorageKey.tasks);
     if (finalTask != null) {
       final taskAfterDecode = jsonDecode(finalTask) as List<dynamic>;
-
       tasks = taskAfterDecode.map((element) => TaskModel.fromJson(element)).toList();
+      notifyListeners();
+      // Handle completed tasks tasks
+      completedTasks = taskAfterDecode.map((element) => TaskModel.fromJson(element)).where((element) => element.isDone).toList();
+      notifyListeners();
+      // Handle high priority tasks
+      highPriorityTasks = taskAfterDecode
+          .map((element) => TaskModel.fromJson(element))
+          .where((element) => element.isHighPriority)
+          .toList();
+
+      // highPriorityTasks = highPriorityTasks.reversed.toList();
+      notifyListeners();
+      // Handle to-do tasks
+      toDoTasks = taskAfterDecode.map((element) => TaskModel.fromJson(element)).where((element) => !element.isDone).toList();
       calculatePercent();
     }
 
