@@ -39,10 +39,10 @@ class TaskController with ChangeNotifier {
     if (finalTask != null) {
       final taskAfterDecode = jsonDecode(finalTask) as List<dynamic>;
       tasks = taskAfterDecode.map((element) => TaskModel.fromJson(element)).toList();
-      notifyListeners();
+
       // Handle completed tasks tasks
       completedTasks = taskAfterDecode.map((element) => TaskModel.fromJson(element)).where((element) => element.isDone).toList();
-      notifyListeners();
+
       // Handle high priority tasks
       highPriorityTasks = taskAfterDecode
           .map((element) => TaskModel.fromJson(element))
@@ -50,7 +50,7 @@ class TaskController with ChangeNotifier {
           .toList();
 
       // highPriorityTasks = highPriorityTasks.reversed.toList();
-      notifyListeners();
+
       // Handle to-do tasks
       toDoTasks = taskAfterDecode.map((element) => TaskModel.fromJson(element)).where((element) => !element.isDone).toList();
       calculatePercent();
@@ -73,7 +73,6 @@ class TaskController with ChangeNotifier {
 
     final updatedTask = tasks.map((element) => element.toJson()).toList();
     PreferencesManager().setString(StorageKey.tasks, jsonEncode(updatedTask));
-
     notifyListeners();
   }
 
@@ -83,7 +82,6 @@ class TaskController with ChangeNotifier {
     calculatePercent();
     final updatedTask = tasks.map((element) => element.toJson()).toList();
     PreferencesManager().setString(StorageKey.tasks, jsonEncode(updatedTask));
-
     notifyListeners();
   }
 }
