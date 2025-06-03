@@ -38,51 +38,54 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         title: Text('User Details'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Form(
           key: _key,
-          child: Column(
-            children: [
-              CustomTextFormField(
-                controller: userNameController,
-                hintText: 'Usama Elgendy',
-                title: "User Name",
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter User Name";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              CustomTextFormField(
-                controller: motivationQuoteController,
-                hintText: 'One task at a time. One step closer.',
-                title: "Motivation Quote",
-                maxLines: 5,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter Motivation Quote";
-                  }
-                  return null;
-                },
-              ),
-              Spacer(),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_key.currentState!.validate()) {
-                    await PreferencesManager().setString(StorageKey.username, userNameController.value.text);
-                    await PreferencesManager().setString(StorageKey.motivationQuote, motivationQuoteController.value.text);
-
-                    Navigator.pop(context, true);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  fixedSize: Size(MediaQuery.of(context).size.width, 40),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                CustomTextFormField(
+                  controller: userNameController,
+                  hintText: 'Usama Elgendy',
+                  title: "User Name",
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Enter User Name";
+                    }
+                    return null;
+                  },
                 ),
-                child: Text('Save Changes'),
-              )
-            ],
+                SizedBox(height: 20),
+                CustomTextFormField(
+                  controller: motivationQuoteController,
+                  hintText: 'One task at a time. One step closer.',
+                  title: "Motivation Quote",
+                  maxLines: 5,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Enter Motivation Quote";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 400),
+
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_key.currentState!.validate()) {
+                      await PreferencesManager().setString(StorageKey.username, userNameController.value.text);
+                      await PreferencesManager().setString(StorageKey.motivationQuote, motivationQuoteController.value.text);
+
+                      Navigator.pop(context, true);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(MediaQuery.of(context).size.width, 40),
+                  ),
+                  child: Text('Save Changes'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

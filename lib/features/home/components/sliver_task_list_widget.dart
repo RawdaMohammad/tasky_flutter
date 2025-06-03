@@ -23,7 +23,7 @@ class SliverTaskListWidget extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'No Data',
-                        style: TextStyle(color: Colors.white, fontSize: 24),
+                        style: Theme.of(context).textTheme.displaySmall,
                       ),
                     ),
                   )
@@ -36,7 +36,6 @@ class SliverTaskListWidget extends StatelessWidget {
                           model: tasksList[index],
                           onChanged: (bool? value) {
                             controller.doneTask(value, index);
-                            controller.loadTask();
                           },
                           onDelete: (int id) {
                             controller.deleteTask(id);

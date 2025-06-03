@@ -21,16 +21,9 @@ class TaskController with ChangeNotifier {
 
 
   init() {
-    loadUserData();
     loadTask();
   }
 
-  void loadUserData() async {
-    username = PreferencesManager().getString(StorageKey.username);
-    userImagePath = PreferencesManager().getString(StorageKey.userImage);
-
-    notifyListeners();
-  }
 
   void loadTask() async {
     isLoading = true;
@@ -40,19 +33,7 @@ class TaskController with ChangeNotifier {
       final taskAfterDecode = jsonDecode(finalTask) as List<dynamic>;
       tasks = taskAfterDecode.map((element) => TaskModel.fromJson(element)).toList();
 
-      // Handle completed tasks tasks
-      completedTasks = taskAfterDecode.map((element) => TaskModel.fromJson(element)).where((element) => element.isDone).toList();
-
-      // Handle high priority tasks
-      highPriorityTasks = taskAfterDecode
-          .map((element) => TaskModel.fromJson(element))
-          .where((element) => element.isHighPriority)
-          .toList();
-
-      // highPriorityTasks = highPriorityTasks.reversed.toList();
-
-      // Handle to-do tasks
-      toDoTasks = taskAfterDecode.map((element) => TaskModel.fromJson(element)).where((element) => !element.isDone).toList();
+      loadTaskWithFilters();
       calculatePercent();
     }
 
@@ -60,6 +41,18 @@ class TaskController with ChangeNotifier {
 
     notifyListeners();
   }
+
+  void loadTaskWithFilters() {
+    // Handle completed tasks tasks
+    completedTasks = tasks.where((e) => e.isDone).toList();
+
+    // Handle high priority tasks
+    highPriorityTasks = tasks.where((e) => e.isHighPriority).toList();
+
+    // Handle to-do tasks
+    toDoTasks = tasks.where((e) => !e.isDone).toList();
+  }
+
 
   calculatePercent() {
     totalTask = tasks.length;
@@ -73,6 +66,8 @@ class TaskController with ChangeNotifier {
 
     final updatedTask = tasks.map((element) => element.toJson()).toList();
     PreferencesManager().setString(StorageKey.tasks, jsonEncode(updatedTask));
+
+    loadTaskWithFilters();
     notifyListeners();
   }
 
@@ -82,6 +77,7 @@ class TaskController with ChangeNotifier {
     calculatePercent();
     final updatedTask = tasks.map((element) => element.toJson()).toList();
     PreferencesManager().setString(StorageKey.tasks, jsonEncode(updatedTask));
+    loadTaskWithFilters();
     notifyListeners();
   }
 }

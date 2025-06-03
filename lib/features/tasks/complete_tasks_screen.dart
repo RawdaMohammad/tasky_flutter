@@ -40,7 +40,6 @@ class CompleteTasksScreen extends StatelessWidget {
                           tasks: taskController.completedTasks,
                           onTap: (value, index) async {
                             taskController.doneTask(value, index);
-                            taskController.loadTask();
                           },
                           emptyMessage: 'No Task Found',
                           onDelete: (int? id) {

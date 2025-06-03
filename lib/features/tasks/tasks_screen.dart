@@ -37,7 +37,6 @@ class TasksScreen extends StatelessWidget {
                         tasks: taskController.toDoTasks,
                         onTap: (value, index) async {
                           taskController.doneTask(value, index);
-                          taskController.loadTask();
                         },
                         emptyMessage: 'No Task Found',
                         onDelete: (int? id) {

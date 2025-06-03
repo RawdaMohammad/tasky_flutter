@@ -29,7 +29,6 @@ class HighPriorityScreen extends StatelessWidget {
                     tasks: taskController.highPriorityTasks,
                     onTap: (value, index) async {
                       taskController.doneTask(value, index);
-                      taskController.loadTask();
                     },
                     emptyMessage: 'No Task Found',
                     onDelete: (int? id) {

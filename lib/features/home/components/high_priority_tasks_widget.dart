@@ -53,7 +53,6 @@ class HighPriorityTasksWidget extends StatelessWidget {
                               onChanged: (bool? value) {
                                 final index = tasksList.indexWhere((e) => e.id == task.id);
                                 controller.doneTask(value, index);
-                                controller.loadTask();
                               },
                             ),
                             Flexible(

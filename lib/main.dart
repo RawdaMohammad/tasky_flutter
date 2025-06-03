@@ -6,6 +6,7 @@ import 'package:tasky/core/theme/light_theme.dart';
 import 'package:tasky/core/theme/theme_controller.dart';
 import 'package:tasky/features/navigation/main_screen.dart';
 import 'package:tasky/features/welcome/welcome_screen.dart';
+import 'package:tasky/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
           theme: lightTheme,
           darkTheme: darkTheme,
           themeMode: themeMode,
-          home: username == null ? WelcomeScreen() : MainScreen(),
+          // home: username == null ? WelcomeScreen() : MainScreen(),
+          home: SplashScreen(username: username,),
         );
       },
     );
