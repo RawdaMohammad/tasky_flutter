@@ -24,7 +24,7 @@ class TaskListWidget extends StatelessWidget {
         ? Center(
             child: Text(
               emptyMessage ?? 'No Data',
-              style: Theme.of(context).textTheme.labelLarge,
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 21),
             ),
           )
         : ListView.separated(

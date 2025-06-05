@@ -23,7 +23,7 @@ class SliverTaskListWidget extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'No Data',
-                        style: Theme.of(context).textTheme.displaySmall,
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 21),
                       ),
                     ),
                   )

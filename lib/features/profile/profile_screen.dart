@@ -158,6 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     PreferencesManager().remove(StorageKey.username);
                     PreferencesManager().remove(StorageKey.motivationQuote);
                     PreferencesManager().remove(StorageKey.tasks);
+                    PreferencesManager().remove(StorageKey.userImage);
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
